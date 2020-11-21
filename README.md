@@ -30,7 +30,7 @@ check the exists of the edge , if exist  deletes the edge and the record of the 
 6. compareTo:
 psado cood thet learned in the lecture with  Elizabeth .
 
-Important functions in GraphAlgo:
+### Important functions in GraphAlgo:
 
  1. copy:
  create a deep copy, we will copy the resulting graph fully so that it points to another object in memory , not the Original object memory.
@@ -44,5 +44,5 @@ Complexity is o(| E | × LOG | V |) and since it finds the smallest path size it
  4. load :
  Receives the file we saved and restores it through the **Serializable** class.
 
-
+#### My project includes test files to all of the mentioned classes and functionality.
 

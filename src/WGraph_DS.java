@@ -24,12 +24,20 @@ public class WGraph_DS implements weighted_graph, Serializable {
     }//O1
 
     @Override
-    public boolean hasEdge(int node1, int node2) {//O(1)
+    /*Necessary condition check,
+     whether the vertices at all in the graph,
+     checks whether the use that the vertex contains exists,
+     if there is a checker whether it is connected
+     to another vertex that contains weight and whether there
+      is a side between the previous two
+      O(1)
+     */
+    public boolean hasEdge(int node1, int node2) {
         if (!nodeInGraph.containsKey(node1) || !nodeInGraph.containsKey(node2)){
             return false;
         }
-        else if(nodeInGraph.containsKey(node1) && nodeInGraph.containsKey(node2)) { // בדיקה האם הקודקודים בכלל בגרף בשביל שנוכל להמשיך
-            if (this.edgeInGraph.get(this.nodeInGraph.get(node1)) != null) { // בדיקה שהרשימה של הקודקוד היא נל
+        else if(nodeInGraph.containsKey(node1) && nodeInGraph.containsKey(node2)) {
+            if (this.edgeInGraph.get(this.nodeInGraph.get(node1)) != null) {
                 return this.edgeInGraph.get(this.nodeInGraph.get(node1)).containsKey(getNode(node2));// שואלת את הקודקוד הראשון עם בחובר אליו בסוף הקודקוד השני כלומר האם קיים צלע
             }
         }
@@ -37,21 +45,32 @@ public class WGraph_DS implements weighted_graph, Serializable {
     }
 
     @Override
-    public double getEdge(int node1, int node2) {//O(1)
-      if (!hasEdge(node1,node2)){ // בודק אם אין צלע בין שני קודקודים - תנאי הכרחי
+    /*
+    If there is no return side -1, if there is a edge we turn to the info
+    of the edge we will select the first vertex and ask for its
+    weight with the vertex to which it is connected
+    o(1)
+     */
+    public double getEdge(int node1, int node2) {
+      if (!hasEdge(node1,node2)){
           return -1;
       }
-      else {// בדיקה האם קיים צלע בין שני הקודקודים
-            return this.edgeInGraph.get(getNode(node1)).get(getNode(node2)).getWeight();// פנייה לאש של הצלעות בוחרת את הקודקוד הראשון ומבקשת את המשקל שלו עם הקודקוד שאליו הוא מחובר
+      else {
+            return this.edgeInGraph.get(getNode(node1)).get(getNode(node2)).getWeight();
       }
     }
 
     @Override
+    /*
+    We will check if the vertex we want to add is the HASHMAP,
+    if we do not insert the vertex into it HASHMAP.
+    O(1).
+     */
     public void addNode(int key) {//O1
-        if (nodeInGraph.containsKey(key)) { //בודקת האם הקודקוד שאותו רוצים להוסיף אם הוא קיים או לא
-            return;
-        } else {
-            node_info newNode = new NodeInfo(key); //עם ערך- יצירת קודקוד חדש
+        if (nodeInGraph.containsKey(key)) {
+        }
+        else {
+            node_info newNode = new NodeInfo(key);
             nodeInGraph.put(key, newNode);
             modeCount++;
 
@@ -59,7 +78,14 @@ public class WGraph_DS implements weighted_graph, Serializable {
     }
 
     @Override
-    public void connect(int node1, int node2, double w) {//O1
+    /*
+    First we will check that there is no negative weight and it is not a self edge,
+    if there is already an edge that we want to add we will just update the weight
+    in case the weight is different. If I want to add an edge that really did not
+    exist we will initialize the HASHMAP and insert the new side in a two-way way.
+    O(1)
+     */
+    public void connect(int node1, int node2, double w) {
         if(getNode(node1) == null || getNode(node2) == null) {
             return;
         }
@@ -68,17 +94,17 @@ public class WGraph_DS implements weighted_graph, Serializable {
             return;
         }
         if (node1 == node2) {
-            System.err.println(" It is not possible to add a self edge "); // להחליף ללא קיים צלע עצמית
+            System.err.println(" It is not possible to add a self edge ");
             return;
         }
-        if (hasEdge(node1, node2)) { // בודקת אם  קיים צלע
+        if (hasEdge(node1, node2)) {
             if(getEdge(node1, node2) != w) modeCount++;
             this.edgeInGraph.get(nodeInGraph.get(node1)).get(nodeInGraph.get(node2)).setWeight(w); // לעדכן את המשקל
             return;
         }
         modeCount++;
-        Edge newEdge = new Edge(w, nodeInGraph.get(node1), nodeInGraph.get(node2)); // צלע חדשה
-        if (this.edgeInGraph.get(nodeInGraph.get(node1)) == null) { // אתחול לאשמאפים
+        Edge newEdge = new Edge(w, nodeInGraph.get(node1), nodeInGraph.get(node2));
+        if (this.edgeInGraph.get(nodeInGraph.get(node1)) == null) {
             edgeInGraph.put(nodeInGraph.get(node1), new HashMap<>());
         }
         if (this.edgeInGraph.get(nodeInGraph.get(node2)) == null) {
@@ -97,41 +123,53 @@ public class WGraph_DS implements weighted_graph, Serializable {
     }
 
     @Override
-    public Collection<node_info> getV(int node_id) {//O1
-        if (edgeInGraph.get(getNode(node_id)) == null){ //בודק האם הרשימה ריקה
+    /*
+    If the list is empty returns the empty list, and if not empty returns the entire Key list.
+    O(1)
+     */
+    public Collection<node_info> getV(int node_id) {
+        if (edgeInGraph.get(getNode(node_id)) == null){
             return new ArrayList<node_info>();
         }
         else {
-            return edgeInGraph.get(getNode(node_id)).keySet();// פונקציה שמחזירה את כל המפתחות
+            return edgeInGraph.get(getNode(node_id)).keySet();
         }
     }
 
     @Override
-    public node_info removeNode(int key) {//O(neighbor)
+    /*
+    If the vertex we want to delete has neighbors, we will go
+    over the list of neighbors of the specific vertex we want
+    to delete and delete the vertex from the list of neighbors.
+    O(neighbor) */
+    public node_info removeNode(int key) {
         if(!this.nodeInGraph.containsKey(key)){
             return null;
         }
-        //// מקבבל את האש מאפ של קי שיש לו את כל השכנים והצלעות
-        if(edgeInGraph.get(getNode(key)) != null) { // כלומר לקודקוד יש שכנים
-            for (node_info neighbor : edgeInGraph.get(getNode(key)).keySet()) {// עובר על כל קודוק דברשימת השכנים
-              //אני עוברת על רשימת השכנים של השכן הספציפי של קי
-                edgeInGraph.get(neighbor).remove(getNode(key)); // אני מוחקת את עצמי מהרשימת שכנים שלו, כלומר קי לא יהיה שמה
+        if(edgeInGraph.get(getNode(key)) != null) {
+            for (node_info neighbor : edgeInGraph.get(getNode(key)).keySet()) {
+                edgeInGraph.get(neighbor).remove(getNode(key));
                 edgeSize--;
             }
             edgeInGraph.remove(getNode(key));
         }
         modeCount++;
-        return nodeInGraph.remove(key); // מוחקת את הקודקוד עצמו
+        return nodeInGraph.remove(key);
     }
 
     @Override
-    public void removeEdge(int node1, int node2) {//O1
+    /*Once you delete a side is deleted in a two-way way,
+     from each vertex we delete the link to the side - we
+     delete the second vertex from its list of neighbors
+     O(1)
+    */
+    public void removeEdge(int node1, int node2) {
         if(!hasEdge(node1,node2)){
             System.err.println("The operation cannot be performed");
             return;
         }
         else {
-            edgeInGraph.get(getNode(node1)).remove(getNode(node2)); // אני מחזיקה את האש בעצם ואז על ידי השימוש בפונקצית רמוב אני מוחקת את קודוקד השני מרשימת השכנים של הקודוקד הראשון ובגלל זה נמחק הצלע
+            edgeInGraph.get(getNode(node1)).remove(getNode(node2));
             edgeInGraph.get(getNode(node2)).remove(getNode(node1));
             edgeSize--;
             modeCount++;
@@ -170,7 +208,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
 
     @Override
     public boolean equals(Object o) {//O1
-        //מיועד כדי להשוות מה באמת יש בקובץ כדי שבהשוואה תהיה השוואה בין המלל עצמו ולא הכתובות בזיכרון
+        //Designed to compare the content itself.
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -205,20 +243,36 @@ public class WGraph_DS implements weighted_graph, Serializable {
         public NodeInfo(int key) {
             this.Key = key;
         }
-        //O1
-        public int getPred() {
+
+        /***the function get the pred value
+         * @return Integer of pred key.
+         */
+        public int getPred() {//O1
             return pred;
         }
+
+        /**the function set the value of pred
+         * @param pred - the key to node pred
+         */
         //O1
         public void setPred(int pred) {
             this.pred = pred;
         }
-        //O1
-        public boolean isVisited() {
+
+        /**
+         * the function checker if the node was already visited
+         * @return true.
+         */
+        public boolean isVisited() {//O1
             return visited;
         }
-        //O1
-        public void setVisited(boolean visited) {
+
+
+        /**
+         * the function set the new value so we can tell if the node was already visited
+         * @return true.
+         */
+        public void setVisited(boolean visited) {//O1
             this.visited = visited;
         }
 
