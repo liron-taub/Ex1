@@ -99,7 +99,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         }
         if (hasEdge(node1, node2)) {
             if(getEdge(node1, node2) != w) modeCount++;
-            this.edgeInGraph.get(nodeInGraph.get(node1)).get(nodeInGraph.get(node2)).setWeight(w); // לעדכן את המשקל
+            this.edgeInGraph.get(nodeInGraph.get(node1)).get(nodeInGraph.get(node2)).setWeight(w); 
             return;
         }
         modeCount++;
