@@ -32,7 +32,7 @@ public class WGraph_DSTest {
     public void Test1() { // Checks the vertices and edge in a empty graph
         WGraph_DS graph = new WGraph_DS();
         assertEquals(0, graph.nodeSize());
-        assertEquals(0, graph.getV().size());// בודק לי את כמות הקודקודים שיש ברשימה
+        assertEquals(0, graph.getV().size());
         assertThrows(NullPointerException.class, () -> graph.getNode(10).getKey());
         assertThrows(NullPointerException.class, () -> graph.getNode(100).getKey());
         assertThrows(NullPointerException.class, () -> graph.getNode(1000).getKey());
@@ -68,7 +68,7 @@ public class WGraph_DSTest {
     }
 
     @Test
-    public void edgesTestEmptyGraph() { // Number of ribs in an empty hip
+    public void edgesTestEmptyGraph() { // Number of edges in an empty hip
         WGraph_DS graph = new WGraph_DS();
         assertFalse(graph.hasEdge(1,2));
         graph.removeEdge(1,5);

@@ -38,7 +38,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         }
         else if(nodeInGraph.containsKey(node1) && nodeInGraph.containsKey(node2)) {
             if (this.edgeInGraph.get(this.nodeInGraph.get(node1)) != null) {
-                return this.edgeInGraph.get(this.nodeInGraph.get(node1)).containsKey(getNode(node2));// שואלת את הקודקוד הראשון עם בחובר אליו בסוף הקודקוד השני כלומר האם קיים צלע
+                return this.edgeInGraph.get(this.nodeInGraph.get(node1)).containsKey(getNode(node2));
             }
         }
         return false;
@@ -306,7 +306,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         public void setTag(double t) {
             tag = t;
         }
-        // //O1 -מימוש של אליזבט
+        // O(1)
         @Override
         public int compareTo(NodeInfo o) {
             int ans=0;

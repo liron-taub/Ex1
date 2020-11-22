@@ -54,7 +54,7 @@ public class WGraph_AlgoTest {
         assertEquals(10, graph.edgeSize());
         graph.removeNode(15);
         graph.removeNode(200);
-        graph2.init(graphcopy); //- האם האתחול עושה את השגיאה ? כי הוא אמור לעדכן את גרף 2 כמו גרף 1 אז למה יש מוזר
+        graph2.init(graphcopy); 
         assertFalse(graph2.isConnected());
         assertEquals(7.5, graph2.shortestPathDist(1, 4));
         assertEquals(-1, graph2.shortestPathDist(1, 7));
